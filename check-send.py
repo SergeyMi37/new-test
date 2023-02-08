@@ -27,20 +27,22 @@ def f():
     threading.Timer(15.0, f).start()  # Перезапуск через 3600 секунд - каждый час
     _dt=str(datetime.datetime.today().strftime("%Y-%m-%d_%H.%M"))
     tfile=open("/sys/bus/w1/devices//w1_slave")
-	ttext=tfile.read()
-	tfile.close()
-	temp=ttext.split("\n")[1].split(" ")[9]
-	_temp=float(temp[2:])/1000
-	#print temperature
-	if _temp<15:
-		_msg=_dc+" 🚨 Внимание предельный порог темпратуры ! "+_temp
+    ttext=tfile.read()
+    tfile.close()
+    temp=ttext.split("\n")[1].split(" ")[9]
+    _temp=float(temp[2:])/1000
+    print(_temp)
+    if _temp<15:
+        _msg=_dc+" 🚨 Внимание предельный порог темпратуры ! "+_temp
 		#send_telegram(_msg)
-		print(_msg)
-	else:
-		_msg=_dc+" темпратура "+_temp
-		print(_msg)
+        print(_msg)
+    else:
+        _msg=_dc+" темпратура "+_temp
+        print(_msg)
 		#send_telegram(_msg)
 
-if name == 'main':
+if __name__ == '__main__':
 	#send_telegram("Привет из питона!")
 	f()
+else:
+    print(__name__)
