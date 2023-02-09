@@ -1,9 +1,9 @@
+# Программа регулярного чтения датчика температуры и посылки сообщения телеботу
 #pip install requests
 #pip install --upgrade pip
 import requests
 import threading
 import datetime
-#print(datetime.datetime.today())
 
 def send_telegram(text: str):
     TOKEN="111"
@@ -33,16 +33,14 @@ def f():
     _temp=float(temp[2:])/1000
     #print(_temp)
     if _temp<15:
-        _msg="👉"+_dt+" 🚨 Внимание предельный порог темпратуры "+str(_temp)
+        _msg=_dt+" 🚨🚨🚨🚨🚨 Внимание предельный нижний порог темпратуры "+str(_temp)
         send_telegram(_msg)
         print(_msg)
     else:
-        _msg="👉"+_dt+" темпратура "+str(_temp)
+        _msg="👉"+_dt+" температура "+str(_temp)
         print(_msg)
         send_telegram(_msg)
 
 if __name__ == '__main__':
-    #send_telegram("Привет из питона!")
+    send_telegram("👉Старт мониторинга за температурой")
     f()
-else:
-    print(__name__)
