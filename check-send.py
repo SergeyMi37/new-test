@@ -7,7 +7,7 @@ import datetime
 import yaml
 import socket
 
-with open('check-send.yml') as _fi:
+with open('/home/pi/repo/check-send.yml') as _fi:
     _param = yaml.safe_load(_fi)
 #print(_param["token"])
 
@@ -51,6 +51,6 @@ def f():
 
 if __name__ == '__main__':
     msg=" ✅ Старт мониторинга температурного датчика. Периодичность: "+str(_param["timeout"])+", пороги оповещения: "+str(_param["min_threshold"])+" <> "+str(_param["max_threshold"])
-    send_telegram(msg+ " "+socket.gethostname()+" "+str(socket.gethostbyname(socket.gethostname())))
+    send_telegram(msg+ " "+socket.gethostname())
     print(msg)
     f()
