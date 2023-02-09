@@ -7,6 +7,32 @@
 1. python -v venv <venv_name>
 2. source venv_name/bin/activate # (`deactivate`)
 3. pip install -r requirements.txt
+4. Реактировать файл конфигурации `check-send.yml`
+```
+# Параметры
+version: '1.0.0'
+
+# выводить регульное сообщение в бот
+dubug_print: yes
+# периодичность опроса датчика в секундах
+#timeout: 3600
+timeout: 15
+# Минимальный порог уведомления в градусах цельсия
+min_threshold: 15
+# Максмальный порог уведомления в градусах цельсия
+max_threshold: 25
+
+
+# Параметры телебота
+token: 1111111
+chat_id: 1111111
+
+# Параметры датчика
+# путь к файлу
+#dirbus1w: /tmp/
+dirbus1w: temp-test.txt
+```
+
 
 # Можно написать демон для systemd, если в вашей операционной системе он используется.
 
