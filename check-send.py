@@ -4,16 +4,21 @@
 import requests
 import threading
 import datetime
+import yaml
+#from yaml.loader import SafeLoader
+
+with open('check-send.yml') as _fi:
+    _param = yaml.safe_load(_fi)
+#print(_param["token"])
 
 def send_telegram(text: str):
-    TOKEN="111"
-    url = "https://api.telegram.org/bot"
-    channel_id = "555"
-    url += TOKEN
-    method = url + "/sendMessage"
+    _TOKEN=_param["token"]
+    _url = "https://api.telegram.org/bot"
+    _channel_id = _param["chat_id"]
+    _method = _url + _TOKEN + "/sendMessage"
 
-    r = requests.post(method, data={
-         "chat_id": channel_id,
+    r = requests.post(_method, data={
+         "chat_id": _channel_id,
          "text": text
           })
 
@@ -24,23 +29,27 @@ def send_telegram(text: str):
         print("Послано удачно")
 
 def f():
-    threading.Timer(3600.0, f).start()  # Перезапуск через 3600 секунд - каждый час
+    threading.Timer(_param["timeout"], f).start()  # Перезапуск через 3600 секунд - каждый час
     _dt=str(datetime.datetime.today().strftime("%Y-%m-%d_%H.%M"))
-    tfile=open("/sys/bus/w1/devices/28-3cade381c52f/w1_slave")
+    tfile=open(_param["dirbus1w"])
     ttext=tfile.read()
     tfile.close()
     temp=ttext.split("\n")[1].split(" ")[9]
     _temp=float(temp[2:])/1000
     #print(_temp)
-    if _temp<15:
-        _msg=_dt+" 🚨🚨🚨🚨🚨 Внимание предельный нижний порог темпратуры "+str(_temp)
+    if _temp < _param["min_threshold"]:
+        _msg=" 🚨🚨🚨🚨🚨 Внимание предельный нижний порог темпратуры "+str(_temp)
         send_telegram(_msg)
-        print(_msg)
-    else:
-        _msg="👉"+_dt+" температура "+str(_temp)
-        print(_msg)
+    elif _temp > _param["max_threshold"]:
+        _msg=" 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨 Внимание предельный верхний порог темпратуры "+str(_temp)
         send_telegram(_msg)
+    elif _param["dubug_print"]:
+        _msg="👉 температура "+str(_temp)
+        send_telegram(_msg)
+    print(_dt+_msg)
 
 if __name__ == '__main__':
-    send_telegram("👉Старт мониторинга за температурой")
+    _msg=" ✅ Старт мониторинга температурного датчика. Периодичность: "+str(_param["timeout"])+", пороги оповещения: "+str(_param["min_threshold"])+" <> "+str(_param["max_threshold"])
+    send_telegram(_msg)
+    print(_msg)
     f()
