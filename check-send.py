@@ -5,7 +5,7 @@ import requests
 import threading
 import datetime
 import yaml
-#from yaml.loader import SafeLoader
+import socket
 
 with open('check-send.yml') as _fi:
     _param = yaml.safe_load(_fi)
@@ -36,6 +36,8 @@ def f():
     tfile.close()
     temp=ttext.split("\n")[1].split(" ")[9]
     _temp=float(temp[2:])/1000
+    _msg="👉 температура "+str(_temp)
+
     #print(_temp)
     if _temp < _param["min_threshold"]:
         _msg=" 🚨🚨🚨🚨🚨 Внимание предельный нижний порог темпратуры "+str(_temp)
@@ -44,12 +46,11 @@ def f():
         _msg=" 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨 Внимание предельный верхний порог темпратуры "+str(_temp)
         send_telegram(_msg)
     elif _param["dubug_print"]:
-        _msg="👉 температура "+str(_temp)
         send_telegram(_msg)
     print(_dt+_msg)
 
 if __name__ == '__main__':
-    _msg=" ✅ Старт мониторинга температурного датчика. Периодичность: "+str(_param["timeout"])+", пороги оповещения: "+str(_param["min_threshold"])+" <> "+str(_param["max_threshold"])
-    send_telegram(_msg)
-    print(_msg)
+    msg=" ✅ Старт мониторинга температурного датчика. Периодичность: "+str(_param["timeout"])+", пороги оповещения: "+str(_param["min_threshold"])+" <> "+str(_param["max_threshold"])
+    send_telegram(msg+ " "+socket.gethostname()+" "+str(socket.gethostbyname(socket.gethostname())))
+    print(msg)
     f()
