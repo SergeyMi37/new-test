@@ -14,10 +14,11 @@
 sudo touch /etc/systemd/system/bot.service
 
 ## Вставляем туда следующее:
+```
 [Unit]
 Description=My bot
 After=multi-user.target
- 
+
 [Service]
 Type=idle
 ExecStart=/usr/bin/python3 /путь/до/скрипта/check-send.py.py
@@ -25,7 +26,7 @@ Restart=always
  
 [Install]
 WantedBy=multi-user.target
-
+```
 
 ## После этого в консоли выполяем:
 sudo systemctl daemon-reload
@@ -43,4 +44,6 @@ sudo systemctl status bot.service
 # Благодарности
 https://myraspberrypi.ru/2018/10/24/%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-ds18b20-%D0%BA-raspberry-pi/
 https://qna.habr.com/q/520860
+http://slugg.spb.ru/ubuntu/ubuntu_setting/36-ubuntu-server-i-set-1-wire.html
+https://sameak.ru/nastrojka-i-ispolzovanie-shiny-1-wire-na-raspberry-pi-3b-s-serverom-owserver/
 
